@@ -1,9 +1,9 @@
 package com.careerdevs.stakeit.controllers;
 
 import com.careerdevs.stakeit.Repositories.PostRepository;
-import com.careerdevs.stakeit.Repositories.UserRepository;
+import com.careerdevs.stakeit.Repositories.ProfileRepository;
 import com.careerdevs.stakeit.models.Post;
-import com.careerdevs.stakeit.models.User;
+import com.careerdevs.stakeit.models.Profile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/posts/")
 public class PostController {
@@ -20,15 +21,15 @@ public class PostController {
     PostRepository postRepository;
 
     @Autowired
-    UserRepository userRepository;
+    ProfileRepository profileRepository;
 
     @PostMapping("/{userId}")
     public ResponseEntity<?> createPost (@PathVariable Long userId,@RequestBody Post newPost){
-        User user = userRepository.findById(userId).orElseThrow(
+        Profile profile = profileRepository.findById(userId).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND)
         );
 
-        newPost.setUser(user);
+        newPost.setProfile(profile);
 
         Post post = postRepository.save(newPost);
         return new ResponseEntity<>(post, HttpStatus.CREATED);
@@ -48,14 +49,14 @@ public class PostController {
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<?> getNotesByListenerId(@PathVariable Long userId){
-        List<Post> posts = postRepository.findAllByUser_id(userId);
+        List<Post> posts = postRepository.findAllByProfile_id(userId);
 
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 
     @GetMapping("/user/name/{userName}")
     public ResponseEntity<?> getNotesByListenerName(@PathVariable String userName){
-        List<Post> posts = postRepository.findAllByUser_name(userName);
+        List<Post> posts = postRepository.findAllByProfile_name(userName);
 
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }

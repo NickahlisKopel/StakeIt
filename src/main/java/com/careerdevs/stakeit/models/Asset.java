@@ -2,11 +2,9 @@ package com.careerdevs.stakeit.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
+@Entity
 public class Asset {
 
     @Id
@@ -29,6 +27,9 @@ public class Asset {
     @JsonProperty("Country")
     private String country;
 
+    public Asset(){
+
+    }
 
     public Asset(Long id, String symbol, String assetType, String name, String currency, String country) {
         this.id = id;

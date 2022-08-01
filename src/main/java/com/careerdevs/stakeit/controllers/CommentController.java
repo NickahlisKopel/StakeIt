@@ -2,10 +2,10 @@ package com.careerdevs.stakeit.controllers;
 
 import com.careerdevs.stakeit.Repositories.CommentRepository;
 import com.careerdevs.stakeit.Repositories.PostRepository;
-import com.careerdevs.stakeit.Repositories.UserRepository;
+import com.careerdevs.stakeit.Repositories.ProfileRepository;
 import com.careerdevs.stakeit.models.Comment;
 import com.careerdevs.stakeit.models.Post;
-import com.careerdevs.stakeit.models.User;
+import com.careerdevs.stakeit.models.Profile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/comments/")
 public class CommentController {
@@ -25,7 +26,7 @@ public class CommentController {
     PostRepository postRepository;
 
     @Autowired
-    UserRepository userRepository;
+    ProfileRepository profileRepository;
 
     @PostMapping("/{postId}/{userId}")
     public ResponseEntity<?> createComment (@PathVariable Long postId,@PathVariable Long userId ,@RequestBody Comment newComment){
@@ -35,11 +36,11 @@ public class CommentController {
 
         newComment.setPost(post);
 
-        User user = userRepository.findById(userId).orElseThrow(
+        Profile profile = profileRepository.findById(userId).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND)
         );
 
-        newComment.setUser(user);
+        newComment.setProfile(profile);
 
         Comment comment = commentRepository.save(newComment);
         return new ResponseEntity<>(comment,HttpStatus.CREATED);
@@ -60,13 +61,13 @@ public class CommentController {
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<?> getCommentsByUser(@PathVariable Long userId){
-        List<Comment> comments = commentRepository.findAllByUser_id(userId);
+        List<Comment> comments = commentRepository.findAllByProfile_id(userId);
         return new ResponseEntity<>(comments, HttpStatus.OK);
     }
 
     @GetMapping("/user/name/{userName}")
     public ResponseEntity<?> getCommentsByUserName(@PathVariable String userName){
-        List<Comment> comments = commentRepository.findAllByUser_name(userName);
+        List<Comment> comments = commentRepository.findAllByProfile_name(userName);
         return new ResponseEntity<>(comments, HttpStatus.OK);
 
     }

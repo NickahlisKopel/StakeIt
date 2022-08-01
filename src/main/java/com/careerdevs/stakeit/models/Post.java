@@ -1,10 +1,8 @@
 package com.careerdevs.stakeit.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -17,22 +15,25 @@ public class Post {
     private String body;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id" )
-    @JsonIgnoreProperties("age")
-    private User user;
+    @JoinColumn(name = "profile_id", referencedColumnName = "id" )
+    @JsonIgnoreProperties("posts")
+    private Profile profile;
 
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
+    @JsonIgnoreProperties("post")
     private Set<Comment> comments;
+
+
 
     public Post(){
 
     }
 
-    public Post(Long id, String title, String body, User user) {
+    public Post(Long id, String title, String body, Profile profile) {
         this.id = id;
         this.title = title;
         this.body = body;
-        this.user = user;
+        this.profile = profile;
     }
 
     public Long getId() {
@@ -59,11 +60,20 @@ public class Post {
         this.body = body;
     }
 
-    public User getUser() {
-        return user;
+    public Profile getProfile() {
+        return profile;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setProfile(Profile profile) {
+        this.profile = profile;
+    }
+
+    public Set<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
     }
 }
+

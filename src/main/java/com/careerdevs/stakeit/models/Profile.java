@@ -1,12 +1,13 @@
 package com.careerdevs.stakeit.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-public class User {
+public class Profile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -16,19 +17,22 @@ public class User {
     private String jobTitle;
     private Integer karma = 0;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY )
-    @JsonIgnore
+    @OneToMany(mappedBy = "profile", fetch = FetchType.LAZY )
+    @JsonIgnoreProperties("profile")
     private Set<Post> posts;
 
 
-    public User(){
+    public Profile(){
 
     }
-    public User(Long id, String name, Integer age, String jobTitle) {
+
+    public Profile(Long id, String name, Integer age, String jobTitle, Integer karma, Set<Post> posts) {
         this.id = id;
         this.name = name;
         this.age = age;
         this.jobTitle = jobTitle;
+        this.karma = karma;
+        this.posts = posts;
     }
 
     public Long getId() {
@@ -70,4 +74,13 @@ public class User {
     public void setKarma(Integer karma) {
         this.karma = karma;
     }
+
+    public Set<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(Set<Post> posts) {
+        this.posts = posts;
+    }
 }
+
