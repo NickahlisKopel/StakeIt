@@ -1,5 +1,6 @@
 package com.careerdevs.stakeit.controllers;
 
+import com.careerdevs.stakeit.Repositories.PostRepository;
 import com.careerdevs.stakeit.Repositories.ProfileRepository;
 import com.careerdevs.stakeit.models.Profile;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ public class ProfileController {
 
     @Autowired
     ProfileRepository profileRepository;
+
+    @Autowired
+    PostRepository postRepository;
 
     @PostMapping("/")
     public ResponseEntity<?> createUser(@RequestBody Profile newProfile){
@@ -48,8 +52,14 @@ public class ProfileController {
     public ResponseEntity<?> deleteProfileById (@PathVariable Long id){
 
         Optional<Profile> foundProfile = profileRepository.findById(id);
+
         profileRepository.deleteById(id);
 
         return new ResponseEntity<>(foundProfile, HttpStatus.OK);
+    }
+    @PutMapping("/")
+    public ResponseEntity<?> updateProfile(@RequestBody Profile updateProfile){
+        Profile savedProfile = profileRepository.save(updateProfile);
+        return new ResponseEntity<>(savedProfile, HttpStatus.OK);
     }
 }

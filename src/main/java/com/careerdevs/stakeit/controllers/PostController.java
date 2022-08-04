@@ -10,11 +10,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin
+
 @RestController
+@CrossOrigin
+@Transactional
 @RequestMapping("/api/posts/")
 public class PostController {
     @Autowired
@@ -30,6 +33,7 @@ public class PostController {
         );
 
         newPost.setProfile(profile);
+        profile.setKarma(profile.getKarma()+1);
 
         Post post = postRepository.save(newPost);
         return new ResponseEntity<>(post, HttpStatus.CREATED);
@@ -48,7 +52,7 @@ public class PostController {
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<?> getNotesByListenerId(@PathVariable Long userId){
+    public ResponseEntity<?> getPostsByProfileId(@PathVariable Long userId){
         List<Post> posts = postRepository.findAllByProfile_id(userId);
 
         return new ResponseEntity<>(posts, HttpStatus.OK);

@@ -17,7 +17,7 @@ public class Profile {
     private String jobTitle;
     private Integer karma = 0;
 
-    @OneToMany(mappedBy = "profile", fetch = FetchType.LAZY )
+    @OneToMany(mappedBy = "profile", fetch = FetchType.EAGER )
     @JsonIgnoreProperties("profile")
     private Set<Post> posts;
 

@@ -19,7 +19,7 @@ public class Post {
     @JsonIgnoreProperties("posts")
     private Profile profile;
 
-    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER)
     @JsonIgnoreProperties("post")
     private Set<Comment> comments;
 
